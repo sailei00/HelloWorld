@@ -14,14 +14,14 @@
 		<center>
 			<table border="1">
 				<tr>
-					<td>物料编码：<input type="text" name="code" value="${itemQueryBean.code}" />
+					<td>物料编码：<input type="text" name="code" />
 					</td>
-					<td>物料名称：<input type="text" name="name" value="${itemQueryBean.name}" />
+					<td>物料名称：<input type="text" name="name" />
 					</td>
-					<td>物料型号：<input type="text" name="model" value="${itemQueryBean.model}" />
+					<td>物料型号：<input type="text" name="model"  />
 					</td>
 					<td>
-						计量单位：<input type="text" name="unit" value="${itemQueryBean.unit}" />
+						计量单位：<input type="text" name="unit" />
 					</td>
 				</tr>
 				<tr>

@@ -162,7 +162,7 @@ go
 create table t_item (
    code                 varchar(255)         not null,
    name                 varchar(255)         not null,
-   model                varchar(255)         not null,
+   model                varchar(255)         null,
    price                numeric(10,2)        null,
    unit                 varchar(255)         null,
    amount               float                null
@@ -284,15 +284,5 @@ go
 alter table t_account
    add constraint FK_T_ACCOUN_REFERENCE_T_ITEM foreign key (item_code)
       references t_item (code)
-go
-
-alter table t_account
-   add constraint FK_ACCOUN_REFERENCE_T_USER foreign key (operator)
-      references t_user (usercode)
-go
-
-alter table t_account
-   add constraint FK_ACCOUN_REFERENCE_USER2 foreign key (updater)
-      references t_user (usercode)
 go
 

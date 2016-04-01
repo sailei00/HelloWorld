@@ -101,11 +101,11 @@ function showSearchPage(obj) {
 		<tr>
 			<td>归属部门：</td>
 			<td>
-				<form:input path="department"/><form:errors  path="department" cssStyle="color:red"/>
+				<form:input path="department" readonly="true"/><form:errors  path="department" cssStyle="color:red"/>
 			</td>
 			<td>操作员：</td>
 			<td>
-				<form:input path="operator"/>
+				<form:input path="operator" readonly="true"/>
 			</td>
 		</tr>
 		<tr>
@@ -121,11 +121,11 @@ function showSearchPage(obj) {
 		<tr>
 			<td>录入时间：</td>
 			<td>
-				<form:input path="createTime" cssClass="Wdate"  onfocus="WdatePicker({firstDayOfWeek:1})"/>
+				<form:input path="createTime"  readonly="true"/>
 			</td>
 			<td>最后修改时间：</td>
 			<td>
-				<form:input path="updateTime" cssClass="Wdate"  onfocus="WdatePicker({firstDayOfWeek:1})"/>
+				<form:input path="updateTime"  readonly="true" />
 			</td>
 		</tr>
 		<tr>
@@ -143,7 +143,7 @@ function showSearchPage(obj) {
 
 
 	<div id="searchDiv" style="display:none;position:absolute;top:30px;left:300px">
-		<iframe id="searchFrame" src="/item/queryforadd" ></iframe>
+		<iframe id="searchFrame"  ></iframe>
 	</div>
 </body>
 </html>

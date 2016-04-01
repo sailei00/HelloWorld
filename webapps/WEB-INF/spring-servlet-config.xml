@@ -24,6 +24,7 @@
 		<property name="exceptionMappings">
 			<props>
 				<prop key="com.fdmy.exception.UserException">error</prop>
+				<prop key="com.fdmy.exception.DBException">error</prop>
 			</props>
 		</property>
 	</bean>

@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,7 @@ public class ItemController {
 		List<Item> itemList = new ArrayList<Item>();
 		itemList = dao.query(itemQueryBean);
 
-		model.addAttribute("itemQueryBean", itemQueryBean);
+//		model.addAttribute("itemQueryBean", itemQueryBean);
 		model.addAttribute("itemList", itemList);
 		return "/item/itemquery";
 	}
@@ -50,7 +51,7 @@ public class ItemController {
 		List<Item> itemList = new ArrayList<Item>();
 		itemList = dao.query(itemQueryBean);
 		System.out.println(abc+"★★★★★★★★★★★★★★★★★★★★★★★★★★");
-		model.addAttribute("itemQueryBean", itemQueryBean);
+//		model.addAttribute("itemQueryBean", itemQueryBean);
 		model.addAttribute("itemList", itemList);
 		return "/account/search";
 	}
@@ -62,13 +63,18 @@ public class ItemController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String add(@Valid Item item,BindingResult br) throws Exception {
-		System.out.println("#####################save by mybatis");
+	public String add(@Valid Item item,BindingResult br,Model model) throws Exception {
 		if(br.hasErrors()){
 			List<ObjectError> errorList = br.getAllErrors();
 			for (ObjectError error : errorList) {
 				System.out.println(error.getDefaultMessage());
 			}
+			return "/item/itempage";
+		}
+		Item i = dao.load(item.getCode());
+		if (i != null) {
+			br.addError(new FieldError("item","code","该物料编码已存在"));
+			model.addAttribute("item",item);
 			return "/item/itempage";
 		}
 		dao.add(item);

@@ -7,6 +7,7 @@
 <title>菜单</title>
 </head>
 <body>
+<a href="./logout">退出登录</a>
 <a href="./item/index">设备材料管理页面</a>
 <a href="./user/index">用户管理页面</a>
 <a href="./account/index">增加出入库信息</a>

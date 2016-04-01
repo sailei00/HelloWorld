@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.fdmy.exception.DBException;
 import com.fdmy.model.Item;
 import com.fdmy.util.DBUtil;
 
@@ -20,6 +21,7 @@ public class ItemDao implements IItemDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 			session.rollback();
+			throw new DBException(e.getMessage());
 		} finally {
 			DBUtil.closeSession(session);
 		}

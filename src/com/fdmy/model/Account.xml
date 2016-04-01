@@ -21,16 +21,16 @@
   -->
 	<insert id="add" parameterType="Account">
 		insert into t_account
-		(type,item_code,item_name,item_model,number,department,operator,handler,reason,opt_time,create_time,update_time,updater)
-		values(#{type},#{item.code},#{item.name},#{item.model},#{number},#{department},#{operator},#{handler},#{reason},#{optTime},#{createTime},#{updateTime},#{updater.updater})
+		(type,item_code,item_name,item_model,unit,number,department,operator,handler,reason,opt_time,create_time,update_time,updater)
+		values(#{type},#{item.code},#{item.name},#{item.model},#{item.unit},#{number},#{department},#{operator},#{handler},#{reason},#{optTime},#{createTime},#{updateTime},#{updater.updater})
 	</insert>
 
 	<update id="update" parameterType="Account">
 		update t_account
 		set
-		type=#{type},item_code=#{item.code},item_name=#{item.name},item_model=#{item.model},number=#{number},
+		type=#{type},item_code=#{item.code},item_name=#{item.name},item_model=#{item.model},unit=#{item.unit},number=#{number},
 		department=#{department},operator=#{operator},handler=#{handler},reason=#{reason},
-		opt_time=#{optTime},create_time=#{createTime},update_time=#{updateTime},updater=#{updater.updater}
+		opt_time=#{optTime},create_time=#{createTime},update_time=getdate(),updater=#{updater.updater}
 		where id = #{id}
 	</update>
 

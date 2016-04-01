@@ -53,8 +53,8 @@
 			<td>用户类型：</td>
 			<td>
 				<form:select path="usertype" >
-					<form:option value="0" label="管理员" />
 					<form:option value="1" label="普通用户"  /> 
+					<form:option value="0" label="管理员" />
 				</form:select>
 				<form:errors path="usertype" cssStyle="color:red"></form:errors>
 			</td>

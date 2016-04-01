@@ -1,7 +1,10 @@
 package com.fdmy.controller;
 
+import java.util.Calendar;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ import com.fdmy.dao.IAccountDao;
 import com.fdmy.dao.IItemDao;
 import com.fdmy.model.Account;
 import com.fdmy.model.Item;
+import com.fdmy.model.User;
 
 @Controller
 @RequestMapping("/account")
@@ -28,61 +32,70 @@ public class AccountController {
 	public AccountController() {
 		System.out.println("a new AccountController");
 	}
-	
+
 	@RequestMapping("/index")
-	public String index(){
+	public String index() {
 		return "/account/accountindex";
 	}
-	
-	@RequestMapping(value="/query",method=RequestMethod.GET)
-	public String query(Account acc,Model model){
+
+	@RequestMapping(value = "/query", method = RequestMethod.GET)
+	public String query(Account acc, Model model) {
 		List<Account> list = dao.query(acc);
-		model.addAttribute("accList",list);
-		model.addAttribute("querybean",acc);
+		model.addAttribute("accList", list);
+		model.addAttribute("querybean", acc);
 		return "/account/accountindex";
 	}
-	
-	@RequestMapping(value="/add",method=RequestMethod.GET)
-	public String toInsert(Model model){
-		model.addAttribute("account", new Account());
+
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public String toInsert(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("loginuser");
+		Account acc = new Account();
+		if (user != null) {
+			acc.setDepartment(user.getDepartment());
+			acc.setOperator(user.getUsername());
+			acc.setCreateTime(Calendar.getInstance().getTime());
+			acc.setUpdateTime(Calendar.getInstance().getTime());
+		}
+		model.addAttribute("account", acc);
 		return "/account/accountpage";
 	}
-	
+
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String add(@Valid Account acc, BindingResult br) throws Exception {
 		System.out.println("###########account##########add#####post");
 		System.out.println(acc);
 		System.out.println(acc.getItem());
-		
+
 		if (br.hasErrors()) {
 			System.out.println("======================");
-			 List<ObjectError> errorList = br.getAllErrors();
-	            for(ObjectError error : errorList){
-	                System.out.println(error.getDefaultMessage());
-	            }
+			List<ObjectError> errorList = br.getAllErrors();
+			for (ObjectError error : errorList) {
+				System.out.println(error.getDefaultMessage());
+			}
 			return "/account/accountpage";
 		}
-		
+
 		Item item = itemDAO.load(acc.getItem().getCode());
-		if (item==null){
-			br.addError(new FieldError("account","item.code","该物料编码不存在"));
-//			br.addError(new ObjectError("item.code","该物料编码不存在"));
+		if (item == null) {
+			br.addError(new FieldError("account", "item.code", "该物料编码不存在"));
+			// br.addError(new ObjectError("item.code","该物料编码不存在"));
 			return "/account/accountpage";
 		}
 		int type = acc.getType();
-		if (type==0) {				//0出库
-			item.setAmount(item.getAmount()-acc.getNumber());
-		} else if(type==1) {		//1入库
+		if (type == 0) { // 0出库
+			item.setAmount(item.getAmount() - acc.getNumber());
+		} else if (type == 1) { // 1入库
 			Double num = acc.getNumber();
 			Double amount = item.getAmount();
-			System.out.println(num+amount);
-			item.setAmount(num+amount);
+			System.out.println(num + amount);
+			item.setAmount(num + amount);
 		}
 		itemDAO.update(item);
 		dao.add(acc);
 		return "redirect:/account/query?item.code=" + acc.getItem().getCode();
 	}
-	
+
 	@RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
 	public String update(@PathVariable String id, Model model) throws Exception {
 		Account acc = dao.load(id);
@@ -91,8 +104,8 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
-	public String update(@Valid Account acc,BindingResult br) throws Exception {
-		if(br.hasErrors()){
+	public String update(@Valid Account acc, BindingResult br) throws Exception {
+		if (br.hasErrors()) {
 			List<ObjectError> errorList = br.getAllErrors();
 			for (ObjectError error : errorList) {
 				System.out.println(error.getDefaultMessage());
@@ -108,6 +121,5 @@ public class AccountController {
 		dao.delete(id);
 		return "redirect:/account/query?id=" + id;
 	}
-	
 
 }

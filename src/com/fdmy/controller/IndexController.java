@@ -15,10 +15,11 @@ import com.fdmy.model.User;
 
 @Controller
 @SessionAttributes("loginuser")
+@RequestMapping("/")
 public class IndexController {
 	private IUserDao dao = DAOFactory.getUserDao();
 
-	@RequestMapping(value="/index",method=RequestMethod.GET)
+	@RequestMapping(value="/",method=RequestMethod.GET)
 	public String index(){
 		return "/index";
 	}
@@ -43,14 +44,14 @@ public class IndexController {
 			throw new UserException("密码错误!");
 		}
 		model.addAttribute("loginuser", user);
-		return "redirect:/index";
+		return "redirect:/";
 	}
 
 	@RequestMapping("/logout")
 	public String logout(Model model, HttpSession session) {
 		model.asMap().remove("loginuser");
 		session.invalidate();
-		return "redirect:/";
+		return "redirect:/login";
 	}
 
 }
